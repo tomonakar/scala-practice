@@ -1,3 +1,4 @@
+// sbt が ビルドを行う際の設定ファイル
 scalaVersion := "2.12.7"
 
 // -deprecation: 今後廃止予定のAPIを利用している時に警告がでる
@@ -21,10 +22,8 @@ libraryDependencies += "org.openjfx" % "javafx-fxml" % "11-ea+25" classifier osN
 libraryDependencies += "org.openjfx" % "javafx-graphics" % "11-ea+25" classifier osName.value
 libraryDependencies += "org.openjfx" % "javafx-web" % "11-ea+25" classifier osName.value
 
+// jarファイルとして配布できる形式するための追記
 assemblyMergeStrategy in assembly := {
     case PathList("module-info.class") => MergeStrategy.first
     case x => (assemblyMergeStrategy in assembly).value(x)
 }
-
-// このファイルは sbtがビルドを行う際の設定ファイル
-// Scalaを拡張した文法で記述できる
