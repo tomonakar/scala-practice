@@ -27,8 +27,11 @@ class Main extends Application {
 
     // 円を管理するcirclesというGroupクラスのオブジェクトを作成
     val circles = new Group()
-    // 縁と中身が白で透明度を設定した円を30個作成する
-    for (i <- 1 to 30) {
+    // 縁と中身が白で透明度を設定した円の個数をこマインドライン引数から取得する
+    // assemblyコマンドでjarファイルをビルド後に以下を実施
+    // /Library/Internet\ Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/java -jar target/scala-2.12/scala-animation-assembly-0.1.0-SNAPSHOT.jar --num=100
+      val circleNum = getParameters.getNamed.getOrDefault("num", "30").toInt
+      for (i <- 1 to circleNum) {
       val circle = new Circle(150, Color.web("white", 0.05))
       circle.setStrokeType(StrokeType.OUTSIDE)
       circle.setStroke(Color.web("white", 0.16))
