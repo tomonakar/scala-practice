@@ -31,10 +31,11 @@ class Main extends Application {
     // assemblyコマンドでjarファイルをビルド後に以下を実施
     // /Library/Internet\ Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/java -jar target/scala-2.12/scala-animation-assembly-0.1.0-SNAPSHOT.jar --num=100
       val circleNum = getParameters.getNamed.getOrDefault("num", "30").toInt
+      val color = getParameters.getNamed.getOrDefault("color", "white")
       for (i <- 1 to circleNum) {
       val circle = new Circle(150, Color.web("white", 0.05))
       circle.setStrokeType(StrokeType.OUTSIDE)
-      circle.setStroke(Color.web("white", 0.16))
+      circle.setStroke(Color.web(color, 0.16))
       circle.setStrokeWidth(4)
       circles.getChildren().add(circle)
     }
