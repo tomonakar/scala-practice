@@ -1,3 +1,3 @@
-target
+07.ide-study/target
 project/*
 !assembly.sbt
