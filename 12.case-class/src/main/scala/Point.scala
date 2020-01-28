@@ -60,3 +60,25 @@ case class CPoint(x: Int, y: Int)
 // hashCode と equals
 // --------------------------------- //
 //
+// hashCode : そのオブジェクトを識別するための Int 型の数値のハッシュコードを返す。
+//            ハッシュアルゴリズムが利用されているコレクションなどで内部的に利用されるメソッドだが、 オブジェクトを等しいとする場合には、同じ値を返す必要がある。
+// equals   : そのオブジェクト同士が等しいかどうかを判定するメソッド
+class hPoint(val x: Int, val y: Int) {
+  override def toString: String = s"Point($x, $y)"
+
+  def canEqual(other: Any): Boolean = other.isInstanceOf[hPoint]
+
+  override def equals(other: Any): Boolean = other match {
+    case that: hPoint =>
+      // this は、そのクラスのインスタンス自体を表すキーワード
+      (that canEqual this) &&
+        x == that.x &&
+        y == that.y
+    case _ => false
+  }
+
+  override def hashCode(): Int = {
+    val state = Seq(x, y)
+    state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
+  }
+}
