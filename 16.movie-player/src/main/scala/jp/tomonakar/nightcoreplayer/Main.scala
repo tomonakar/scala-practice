@@ -1,3 +1,31 @@
+// note:
+
+// コピぺコードの弊害
+// 特定の振る舞いを一つ修正するのに大量のコードを修正する必要がある
+// コードの行数自体が増えて、コードを読むのに時間がかかるようになる
+
+// マーチン・ファウラーというエンジニアによって書かれた「リファクタリング」 という著作の中では、
+// リファクタリングは、外部から見たときの振る舞いを保ちつつ、
+// 理解や修正が簡単になるようにソフトウェアの内部構造を変化させること、 と言われています。
+
+// なぜリファクタリングをするのでしょうか。
+// 同じ著作の中で、ケント・ベックというエンジニアは、
+//
+// - 読みにくいプログラムは変更しにくい
+// - ロジックが重複しているプログラムは変更しにくい
+// - 機能追加に伴い、既存のコード修正が必要になるプログラムは変更しにくい
+// - 複雑な条件分岐の多いプログラムは変更しにくい
+
+// 変更が行いやすいプログラムは、以上の問題が解消され、
+// コードを理解しやすくなることでバグを見つけやすく、
+// そしてバグも修正しやすく、機能追加も行いやすいため、 非常に品質の高いソフトウェアとなりる
+
+// リファクタの手法
+// - メソッドの抽出
+// - クラスの抽出
+// - データの再編成
+// - メソッド名の変更
+
 package jp.tomonakar.nightcoreplayer
 
 import java.io.File
@@ -254,6 +282,34 @@ class Main extends Application {
       }
     )
 
+    // fullscreen button
+    val fullscreenButtonImage = new Image(
+      getClass.getResourceAsStream("fullscreen.png")
+    )
+    val fullscreenButton = new Button()
+    fullscreenButton.setGraphic(new ImageView(fullscreenButtonImage))
+    fullscreenButton.setStyle("-fx-background-color: Black")
+    fullscreenButton.setOnAction(new EventHandler[ActionEvent]() {
+      override def handle(event: ActionEvent): Unit =
+        primaryStage.setFullScreen(true)
+    })
+    fullscreenButton.addEventHandler(
+      MouseEvent.MOUSE_ENTERED,
+      new EventHandler[MouseEvent]() {
+        override def handle(event: MouseEvent): Unit = {
+          fullscreenButton.setStyle("-fx-body-color: Black")
+        }
+      }
+    )
+    fullscreenButton.addEventHandler(
+      MouseEvent.MOUSE_EXITED,
+      new EventHandler[MouseEvent]() {
+        override def handle(event: MouseEvent): Unit = {
+          fullscreenButton.setStyle("-fx-background-color: Black")
+        }
+      }
+    )
+
     toolBar.getChildren.addAll(
       firstButton,
       backButton,
@@ -261,6 +317,7 @@ class Main extends Application {
       pauseButton,
       forwardButton,
       lastButton,
+      fullscreenButton,
       timeLabel
     )
 
