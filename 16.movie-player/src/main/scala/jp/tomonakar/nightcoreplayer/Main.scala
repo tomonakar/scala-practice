@@ -107,8 +107,8 @@ class Main extends Application {
     tableView.getColumns.setAll(fileNameColumn, timeColumn, deleteActionColumn)
 
     // first button
-    val forwardButton = createButton(
-      "forward.png",
+    val firstButton = createButton(
+      "first.png",
       new EventHandler[ActionEvent]() {
         override def handle(event: ActionEvent): Unit =
           if (mediaView.getMediaPlayer != null) {
@@ -121,7 +121,6 @@ class Main extends Application {
     val backButton = createButton(
       "back.png",
       new EventHandler[ActionEvent]() {
-
         override def handle(event: ActionEvent): Unit =
           if (mediaView.getMediaPlayer != null) {
             mediaView.getMediaPlayer.seek(
@@ -329,30 +328,36 @@ class Main extends Application {
     mediaPlayer.play()
   }
 
-  private[this] def playPre(tableView: TableView[Movie],
-                            mediaView: MediaView,
-                            timeLabel: Label): Unit = {
+  sealed trait Track
+  object Pre extends Track
+  object Next extends Track
+
+  private[this] def playAt(track: Track,
+                           tableView: TableView[Movie],
+                           mediaView: MediaView,
+                           timeLabel: Label): Unit = {
     val selectionModel = tableView.getSelectionModel
     if (selectionModel.isEmpty) return
     val index = selectionModel.getSelectedIndex
-    val preIndex = (tableView.getItems.size() + index - 1) % tableView.getItems
-      .size()
-    selectionModel.select(preIndex)
+    val changedIndex = track match {
+      case Pre =>
+        (tableView.getItems.size() + index - 1) % tableView.getItems.size()
+      case Next => (index + 1) % tableView.getItems.size()
+    }
+    selectionModel.select(changedIndex)
     val movie = selectionModel.getSelectedItem
     playMovie(movie, tableView, mediaView, timeLabel)
   }
 
+  private[this] def playPre(tableView: TableView[Movie],
+                            mediaView: MediaView,
+                            timeLabel: Label): Unit =
+    playAt(Pre, tableView, mediaView, timeLabel)
+
   private[this] def playNext(tableView: TableView[Movie],
                              mediaView: MediaView,
-                             timeLabel: Label): Unit = {
-    val selectionModel = tableView.getSelectionModel
-    if (selectionModel.isEmpty) return
-    val index = selectionModel.getSelectedIndex
-    val nextIndex = (index + 1) % tableView.getItems.size()
-    selectionModel.select(nextIndex)
-    val movie = selectionModel.getSelectedItem
-    playMovie(movie, tableView, mediaView, timeLabel)
-  }
+                             timeLabel: Label): Unit =
+    playAt(Next, tableView, mediaView, timeLabel)
 
   private[this] def formatTime(elapsed: Duration): String = {
     "%02d:%02d:%02d".format(
